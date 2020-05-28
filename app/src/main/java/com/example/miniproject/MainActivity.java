@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,8 +17,9 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity  {
 
+    private static final int REQUEST_CODE = 11;
     private TextView tvLocation;
-    private Button btnLatlng;
+    private Button btnLatlng, btnCrrentLocation;
     private LocationManager locationManager;
     private double latitude, longitude;
 
@@ -28,10 +30,18 @@ public class MainActivity extends AppCompatActivity  {
 
         tvLocation = (TextView) findViewById(R.id.tvLocation);
         btnLatlng = (Button) findViewById(R.id.btn_Location);
+        btnCrrentLocation = (Button) findViewById(R.id.btn_CurrentLocation);
 
         //check permission
         ActivityCompat.requestPermissions(MainActivity.this, new String[] {
-                Manifest.permission.ACCESS_FINE_LOCATION},11);
+                Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+        btnCrrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnLatlng.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +54,9 @@ public class MainActivity extends AppCompatActivity  {
                     double longi = location.getLongitude();
                     tvLocation.setText("Latitude: " + lat + "\n" + "Longitude: " + longi);
                 }
+
             }
         });
     }
+
 }
